@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by n27 on 11/20/16.
+ * Result of the input file parsing
  */
 @Value
 public class Action {

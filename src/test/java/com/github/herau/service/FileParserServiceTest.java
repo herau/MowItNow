@@ -1,21 +1,16 @@
 package com.github.herau.service;
 
 import com.github.herau.ApplicationProperties;
-import com.github.herau.MowItNowApplication;
 import com.github.herau.domain.Action;
 import com.github.herau.domain.Mow;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -43,8 +38,8 @@ public class FileParserServiceTest {
 
         Action action = service.parse(properties.getInputFile());
 
-        assertEquals(5, action.getGrass().getX());
-        assertEquals(5, action.getGrass().getY());
+        assertEquals(5, action.getGrass().getXMax());
+        assertEquals(5, action.getGrass().getYMax());
 
         Map<Mow, List<Movement>> movementsByMow = action.getMovementsByMow();
 

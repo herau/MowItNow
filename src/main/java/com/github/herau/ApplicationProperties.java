@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
 
+/**
+ * Application configuration properties
+ */
 @Component
 @ConfigurationProperties(prefix = "mow")
 @Data

@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 /**
  * Service which move a mow in a grass according to its limit and a list of movement steps
  */
@@ -20,13 +18,13 @@ public class MowService {
     /**
      * Move on the grass the mow according to the movement instructions and return this position
      * @return the mow position after all the instruction steps
-     * @param grass
-     * @param mow
-     * @param movements
+     * @param grass The grass in which the mowers are deployed and moved
+     * @param mow The mow to move in the grass
+     * @param movements The List of the movement steps
      */
     public String move(Grass grass, Mow mow, List<Movement> movements) {
-        int grassX = grass.getX();
-        int grassY = grass.getY();
+        int grassX = grass.getXMax();
+        int grassY = grass.getYMax();
 
         movements.forEach(movement -> {
             switch (movement) {
@@ -49,13 +47,14 @@ public class MowService {
                             xStep = -1;
                             break;
                         default:
+                            // Do nothing
                             break;
                     }
 
                     final int nextX = mow.getX() + xStep;
                     final int nextY = mow.getY() + yStep;
 
-                    if (nextX >= 0 && nextX <= grassX && nextY >= 0 && nextY <= grassY) {
+                    if (grass.isInside(nextX, nextY)) {
                         mow.setX(nextX);
                         mow.setY(nextY);
                     }
