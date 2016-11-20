@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "mow.inputFile",
+      "type": "java.nio.file.Path",
+      "description": "Path of the input file."
+    }
+  ]
+}

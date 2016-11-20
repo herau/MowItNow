@@ -9,7 +9,7 @@ import java.nio.file.Path;
 @Component
 @ConfigurationProperties(prefix = "mow")
 @Data
-class ApplicationProperties {
+public class ApplicationProperties {
 
     /**
      * Input file path

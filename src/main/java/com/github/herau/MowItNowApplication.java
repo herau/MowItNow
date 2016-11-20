@@ -1,5 +1,8 @@
 package com.github.herau;
 
+import com.github.herau.domain.Action;
+import com.github.herau.domain.Grass;
+import com.github.herau.service.FileParserService;
 import com.github.herau.service.MowService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -7,16 +10,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.validation.Validator;
 
+import java.nio.file.Path;
+
 @SpringBootApplication
 public class MowItNowApplication implements CommandLineRunner{
 
     private final ApplicationProperties properties;
 
-    private final MowService service;
+    private final MowService mowService;
 
-    public MowItNowApplication(ApplicationProperties properties, MowService service) {
+    private final FileParserService fileParser;
+
+    public MowItNowApplication(ApplicationProperties properties, MowService mowService, FileParserService fileParser) {
         this.properties = properties;
-        this.service = service;
+        this.mowService = mowService;
+        this.fileParser = fileParser;
     }
 
 	public static void main(String[] args) {
@@ -30,6 +38,16 @@ public class MowItNowApplication implements CommandLineRunner{
 
     @Override
     public void run(String... strings) throws Exception {
-        service.launch(properties.getInputFile());
+        final Path inputFilePath = properties.getInputFile();
+
+        Action action = fileParser.parse(inputFilePath);
+
+        final Grass grass = action.getGrass();
+
+        action.getMovementsByMow().forEach((mow, movements) -> {
+            System.out.println(mow);
+            String mowPosition = mowService.move(grass, mow, movements);
+            System.out.println(mowPosition);
+        });
     }
 }
