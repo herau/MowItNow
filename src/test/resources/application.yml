@@ -1,0 +1,6 @@
+mow:
+  inputFile: classpath:/defaultInputFile
+
+logging:
+  level:
+    com.github.herau: INFO

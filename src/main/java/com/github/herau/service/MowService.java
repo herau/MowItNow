@@ -4,6 +4,8 @@ import com.github.herau.domain.Cardinal;
 import com.github.herau.domain.Grass;
 import com.github.herau.domain.Movement;
 import com.github.herau.domain.Mow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Stream;
@@ -13,6 +15,8 @@ import java.util.stream.Stream;
  */
 @Service
 public class MowService {
+
+    private static final Logger loggger = LoggerFactory.getLogger(MowService.class);
 
     private static final Cardinal[] DIRECTIONS = Cardinal.values();
 
@@ -24,14 +28,16 @@ public class MowService {
      * @param movements The List of the movement steps
      */
     public String move(Grass grass, Mow mow, Stream<Movement> movements) {
+        loggger.debug("Moving the mow [{}] on the grass [{}]", mow, grass);
+
         movements.forEach(movement -> {
+            loggger.debug("Current mow position [{}]", mow);
+            loggger.debug("Next movement [{}]", movement);
             switch (movement) {
                 case A:
-                    Cardinal direction = mow.getDirection();
-
                     int xStep = 0;
                     int yStep = 0;
-                    switch (direction) {
+                    switch (mow.getDirection()) {
                         case E:
                             xStep = 1;
                             break;
@@ -68,6 +74,8 @@ public class MowService {
                     break;
             }
         });
+
+        loggger.debug("Current mow position [{}]", mow);
 
         return mow.toString();
     }

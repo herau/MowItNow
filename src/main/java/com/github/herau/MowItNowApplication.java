@@ -6,6 +6,8 @@ import com.github.herau.domain.Action;
 import com.github.herau.domain.Grass;
 import com.github.herau.service.FileParserService;
 import com.github.herau.service.MowService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +18,8 @@ import java.nio.file.Path;
 
 @SpringBootApplication
 public class MowItNowApplication implements CommandLineRunner{
+
+    private static final Logger logger = LoggerFactory.getLogger(MowItNowApplication.class);
 
     private final ApplicationProperties properties;
 
@@ -47,9 +51,9 @@ public class MowItNowApplication implements CommandLineRunner{
         final Grass grass = action.getGrass();
 
         action.getMovementsByMow().forEach((mow, movements) -> {
-            System.out.println("Before : " + mow);
+            logger.info("Initial Position - " + mow);
             String mowPosition = mowService.move(grass, mow, movements);
-            System.out.println("After  : " + mowPosition);
+            logger.info("Final Position   - " + mowPosition);
         });
     }
 }
