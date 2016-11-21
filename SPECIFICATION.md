@@ -38,16 +38,16 @@ Concevoir et écrire un programme s'exécutant sur une JVM ≥ 1.7 ou un serveur
 
 Le fichier suivant est fourni en entrée : 
 ```
-55
-12N
+5 5
+1 2 N
 GAGAGAGAA
-33E
+3 3 E
 AADAADADDA
 ```
 On attend le résultat suivant (position finale des tondeuses) :
  ```
-13N
-51E
+1 3 N
+5 1 E
 ```
 
 > NB: Les données en entrée peuvent être injectée sous une autre forme qu'un fichier (par exemple un test automatisé).

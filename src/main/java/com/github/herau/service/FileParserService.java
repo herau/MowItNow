@@ -3,6 +3,7 @@ package com.github.herau.service;
 import com.github.herau.domain.Action;
 import com.github.herau.domain.Cardinal;
 import com.github.herau.domain.Grass;
+import com.github.herau.domain.Movement;
 import com.github.herau.domain.Mow;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +11,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Service which parse a text file which contains grass limit, mow positions and movements instructions
@@ -37,20 +38,19 @@ public class FileParserService {
         List<String> lines = Files.readAllLines(inputFilePath);
 
         String grassLimit = lines.get(0);
-        final Grass grass = new Grass(Integer.parseInt(grassLimit.substring(0, 1)), Integer.parseInt(grassLimit.substring(1, 2)));
+        String[] grassLimits = grassLimit.split(" ");
+        final Grass grass = new Grass(Integer.parseInt(grassLimits[0]), Integer.parseInt(grassLimits[1]));
 
-        final Map<Mow, List<Movement>> movementsByMow = new HashMap<>();
+        final Map<Mow, Stream<Movement>> movementsByMow = new LinkedHashMap<>();
         for (int i = 1; i < lines.size(); i++) {
-            final String mowPosition = lines.get(i);
-            final String mowSteps = lines.get(++i);
+            String[] mowPositions = lines.get(i).split(" ");
+            String mowSteps = lines.get(++i);
 
-            Mow mow = new Mow(Integer.parseInt(mowPosition.substring(0, 1)),
-                              Integer.parseInt(mowPosition.substring(1, 2)),
-                              Cardinal.valueOf(mowPosition.substring(2, 3)));
+            Mow mow = new Mow(Integer.parseInt(mowPositions[0]),
+                              Integer.parseInt(mowPositions[1]),
+                              Cardinal.valueOf(mowPositions[2]));
 
-            List<Movement> movements =
-                    Arrays.stream(mowSteps.split("")).map(Movement::valueOf).collect(Collectors.toList());
-            movementsByMow.put(mow, movements);
+            movementsByMow.put(mow, Arrays.stream(mowSteps.split("")).map(Movement::valueOf));
         }
 
         return new Action(grass, movementsByMow);

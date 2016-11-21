@@ -1,5 +1,7 @@
 package com.github.herau;
 
+import com.github.herau.configuration.ApplicationProperties;
+import com.github.herau.configuration.ApplicationPropertiesValidator;
 import com.github.herau.domain.Action;
 import com.github.herau.domain.Grass;
 import com.github.herau.service.FileParserService;
@@ -45,9 +47,9 @@ public class MowItNowApplication implements CommandLineRunner{
         final Grass grass = action.getGrass();
 
         action.getMovementsByMow().forEach((mow, movements) -> {
-            System.out.println(mow);
+            System.out.println("Before : " + mow);
             String mowPosition = mowService.move(grass, mow, movements);
-            System.out.println(mowPosition);
+            System.out.println("After  : " + mowPosition);
         });
     }
 }

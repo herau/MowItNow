@@ -2,10 +2,11 @@ package com.github.herau.service;
 
 import com.github.herau.domain.Cardinal;
 import com.github.herau.domain.Grass;
+import com.github.herau.domain.Movement;
 import com.github.herau.domain.Mow;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Service which move a mow in a grass according to its limit and a list of movement steps
@@ -22,10 +23,7 @@ public class MowService {
      * @param mow The mow to move in the grass
      * @param movements The List of the movement steps
      */
-    public String move(Grass grass, Mow mow, List<Movement> movements) {
-        int grassX = grass.getXMax();
-        int grassY = grass.getYMax();
-
+    public String move(Grass grass, Mow mow, Stream<Movement> movements) {
         movements.forEach(movement -> {
             switch (movement) {
                 case A:
@@ -60,7 +58,7 @@ public class MowService {
                     }
                     break;
                 case D:
-                    mow.setDirection(DIRECTIONS[Math.floorMod(mow.getDirection().ordinal() + 1, DIRECTIONS.length - 1)]);
+                    mow.setDirection(DIRECTIONS[Math.floorMod(mow.getDirection().ordinal() + 1, DIRECTIONS.length)]);
                     break;
                 case G:
                     mow.setDirection(DIRECTIONS[Math.floorMod(mow.getDirection().ordinal() - 1, DIRECTIONS.length)]);

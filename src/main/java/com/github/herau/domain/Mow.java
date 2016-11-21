@@ -17,6 +17,6 @@ public class Mow {
     private Cardinal direction;
 
     public String toString() {
-        return String.valueOf(x) + String.valueOf(y) + direction;
+        return x + " " + y + " " + direction;
     }
 }

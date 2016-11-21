@@ -1,9 +1,7 @@
-package com.github.herau.service;
-
-import com.github.herau.domain.Cardinal;
+package com.github.herau.domain;
 
 /**
- * Created by n27 on 11/20/16.
+ * Representation of the all allowed movements for a {@link com.github.herau.domain.Mow} inside a {@link com.github.herau.domain.Grass}
  */
 public enum Movement {
     /**

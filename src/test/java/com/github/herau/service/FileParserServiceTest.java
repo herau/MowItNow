@@ -1,23 +1,26 @@
 package com.github.herau.service;
 
-import com.github.herau.ApplicationProperties;
+import com.github.herau.configuration.ApplicationProperties;
 import com.github.herau.domain.Action;
+import com.github.herau.domain.Grass;
+import com.github.herau.domain.Movement;
 import com.github.herau.domain.Mow;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static org.junit.Assert.*;
+import static com.github.herau.domain.Cardinal.E;
+import static com.github.herau.domain.Cardinal.N;
+import static com.github.herau.domain.Movement.A;
+import static com.github.herau.domain.Movement.D;
+import static com.github.herau.domain.Movement.G;
+import static org.junit.Assert.assertEquals;
 
-/**
- * Created by n27 on 11/20/16.
- */
-@RunWith(SpringJUnit4ClassRunner.class)
 public class FileParserServiceTest {
 
     private ApplicationProperties properties;
@@ -34,18 +37,29 @@ public class FileParserServiceTest {
     }
 
     @Test
-    public void parse() throws Exception {
+    public void fileParserSerice_parse_ok() throws Exception {
+        Grass grass = new Grass(5, 5);
+        Mow firstMow = new Mow(1, 2, N);
+        Mow secondMow = new Mow(3, 3, E);
 
         Action action = service.parse(properties.getInputFile());
 
-        assertEquals(5, action.getGrass().getXMax());
-        assertEquals(5, action.getGrass().getYMax());
+        assertEquals(0, action.getGrass().getXMin());
+        assertEquals(0, action.getGrass().getYMin());
+        assertEquals(grass.getXMax(), action.getGrass().getXMax());
+        assertEquals(grass.getYMax(), action.getGrass().getYMax());
 
-        Map<Mow, List<Movement>> movementsByMow = action.getMovementsByMow();
+        Map<Mow, Stream<Movement>> movementsByMow = action.getMovementsByMow();
 
         assertEquals(2, movementsByMow.entrySet().size());
 
-//        TODO add more test
+        assertEquals(Stream.of(G, A, G, A, G, A, G, A, A).collect(Collectors.toList()), movementsByMow.get(firstMow).collect(Collectors.toList()));
+        assertEquals(Stream.of(A, A, D, A, A ,D ,A ,D ,D, A).collect(Collectors.toList()), movementsByMow.get(secondMow).collect(Collectors.toList()));
+    }
+
+    @Test(expected=IOException.class)
+    public void fileParserSerice_parse_invalidInputFile() throws IOException {
+        service.parse(Paths.get(""));
     }
 
 }

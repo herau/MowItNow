@@ -1,10 +1,9 @@
 package com.github.herau.domain;
 
-import com.github.herau.service.Movement;
 import lombok.Value;
 
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * Result of the input file parsing
@@ -14,5 +13,5 @@ public class Action {
 
     Grass grass;
 
-    Map<Mow, List<Movement>> movementsByMow;
+    Map<Mow, Stream<Movement>> movementsByMow;
 }

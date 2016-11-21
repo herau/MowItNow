@@ -1,4 +1,4 @@
-package com.github.herau;
+package com.github.herau.configuration;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

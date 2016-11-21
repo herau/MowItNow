@@ -1,4 +1,4 @@
-package com.github.herau;
+package com.github.herau.configuration;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
