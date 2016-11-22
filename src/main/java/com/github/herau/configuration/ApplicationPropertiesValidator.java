@@ -1,7 +1,6 @@
 package com.github.herau.configuration;
 
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import java.nio.file.Files;
@@ -21,7 +20,6 @@ public class ApplicationPropertiesValidator implements Validator{
 
     @Override
     public void validate(Object o, Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "inputFile", ARG_ERROR, "missing --mower.inputFile arguments");
         ApplicationProperties properties = (ApplicationProperties) o;
 
         Path inputFilePath = properties.getInputFile();

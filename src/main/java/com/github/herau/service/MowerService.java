@@ -31,7 +31,6 @@ public class MowerService {
         logger.debug("Moving the mower [{}] on the lawn [{}]", mower, lawn);
 
         movements.forEach(movement -> {
-            logger.debug("Current mower position [{}]", mower);
             logger.debug("Next movement [{}]", movement);
             switch (movement) {
                 case A:
@@ -73,6 +72,7 @@ public class MowerService {
                     // nothing to do
                     break;
             }
+            mower.positionChanged();
         });
 
         logger.debug("Current mower position [{}]", mower);
