@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * Mow instance is representing by its position (x, y) and its cardinal direction {@link Cardinal}
+ * Mower instance is representing by its position (x, y) and its cardinal direction {@link Cardinal}
  */
 @Data
 @AllArgsConstructor
-public class Mow {
+public class Mower {
 
     private int x;
 

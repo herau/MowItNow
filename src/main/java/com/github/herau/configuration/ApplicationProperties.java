@@ -10,7 +10,7 @@ import java.nio.file.Path;
  * Application configuration properties
  */
 @Component
-@ConfigurationProperties(prefix = "mow")
+@ConfigurationProperties(prefix = "mower")
 @Data
 public class ApplicationProperties {
 

@@ -1,4 +1,4 @@
-mow:
+mower:
   inputFile: classpath:/defaultInputFile
 
 logging:

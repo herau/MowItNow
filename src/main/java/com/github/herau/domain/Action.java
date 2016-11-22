@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 @Value
 public class Action {
 
-    Grass grass;
+    Lawn lawn;
 
-    Map<Mow, Stream<Movement>> movementsByMow;
+    Map<Mower, Stream<Movement>> movementsByMow;
 }

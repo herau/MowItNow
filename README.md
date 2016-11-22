@@ -20,11 +20,11 @@ A dedicated unit test (MowItApplicationTests) will show the expected result acco
 ```bash
 # Unix
 ./mvnw clean package
-java -jar target/mowitnow-0.0.1-SNAPSHOT.jar --mow.input-file="/path/to/instructions.txt"
+java -jar target/mowitnow-0.0.1-SNAPSHOT.jar --mower.input-file="/path/to/instructions.txt"
 
 #Windows
 ./mvnw.cmd clean package
-java -jar target/mowitnow-0.0.1-SNAPSHOT.jar --mow.input-file="/path/to/instructions.txt"
+java -jar target/mowitnow-0.0.1-SNAPSHOT.jar --mower.input-file="/path/to/instructions.txt"
 ```
 
 ## Program details

@@ -2,9 +2,9 @@ package com.github.herau.service;
 
 import com.github.herau.configuration.ApplicationProperties;
 import com.github.herau.domain.Action;
-import com.github.herau.domain.Grass;
+import com.github.herau.domain.Lawn;
 import com.github.herau.domain.Movement;
-import com.github.herau.domain.Mow;
+import com.github.herau.domain.Mower;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,23 +38,24 @@ public class FileParserServiceTest {
 
     @Test
     public void fileParserSerice_parse_ok() throws Exception {
-        Grass grass = new Grass(5, 5);
-        Mow firstMow = new Mow(1, 2, N);
-        Mow secondMow = new Mow(3, 3, E);
+        Lawn lawn = new Lawn(5, 5);
+        Mower firstMower = new Mower(1, 2, N);
+        Mower secondMower = new Mower(3, 3, E);
 
         Action action = service.parse(properties.getInputFile());
 
-        assertEquals(0, action.getGrass().getXMin());
-        assertEquals(0, action.getGrass().getYMin());
-        assertEquals(grass.getXMax(), action.getGrass().getXMax());
-        assertEquals(grass.getYMax(), action.getGrass().getYMax());
+        assertEquals(0, action.getLawn().getXMin());
+        assertEquals(0, action.getLawn().getYMin());
+        assertEquals(lawn.getXMax(), action.getLawn().getXMax());
+        assertEquals(lawn.getYMax(), action.getLawn().getYMax());
 
-        Map<Mow, Stream<Movement>> movementsByMow = action.getMovementsByMow();
+        Map<Mower, Stream<Movement>> movementsByMow = action.getMovementsByMow();
 
         assertEquals(2, movementsByMow.entrySet().size());
 
-        assertEquals(Stream.of(G, A, G, A, G, A, G, A, A).collect(Collectors.toList()), movementsByMow.get(firstMow).collect(Collectors.toList()));
-        assertEquals(Stream.of(A, A, D, A, A ,D ,A ,D ,D, A).collect(Collectors.toList()), movementsByMow.get(secondMow).collect(Collectors.toList()));
+        assertEquals(Stream.of(G, A, G, A, G, A, G, A, A).collect(Collectors.toList()), movementsByMow.get(firstMower).collect(Collectors.toList()));
+        assertEquals(Stream.of(A, A, D, A, A ,D ,A ,D ,D, A).collect(Collectors.toList()), movementsByMow.get(
+                secondMower).collect(Collectors.toList()));
     }
 
     @Test(expected=IOException.class)

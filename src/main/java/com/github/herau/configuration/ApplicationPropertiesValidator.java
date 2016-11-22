@@ -21,7 +21,7 @@ public class ApplicationPropertiesValidator implements Validator{
 
     @Override
     public void validate(Object o, Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "inputFile", ARG_ERROR, "missing --mow.inputFile arguments");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "inputFile", ARG_ERROR, "missing --mower.inputFile arguments");
         ApplicationProperties properties = (ApplicationProperties) o;
 
         Path inputFilePath = properties.getInputFile();

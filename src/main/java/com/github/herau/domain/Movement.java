@@ -1,7 +1,7 @@
 package com.github.herau.domain;
 
 /**
- * Representation of the all allowed movements for a {@link com.github.herau.domain.Mow} inside a {@link com.github.herau.domain.Grass}
+ * Representation of the all allowed movements for a {@link Mower} inside a {@link Lawn}
  */
 public enum Movement {
     /**
