@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 /**
- * Result of the input file parsing
+ * Mowing steps
  */
 @Value
-public class Action {
+public class MowingAction {
 
     Lawn lawn;
 

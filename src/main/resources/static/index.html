@@ -7,10 +7,7 @@
     <style>
         #holder { border: 10px dashed #ccc; width: 300px; min-height: 300px; margin: 20px auto;}
         #holder.hover { border: 10px dashed #0c0; }
-        #holder img { display: block; margin: 10px auto; }
         #holder p { margin: 10px; font-size: 14px; }
-        progress { width: 100%; }
-        progress:after { content: '%'; }
         .fail { background: #c00; padding: 2px; color: #fff; }
         .hidden { display: none !important;}
     </style>
@@ -23,6 +20,7 @@
     <p id="formdata">XHR2's FormData is not supported</p>
     <p>Drag a test file from your desktop on to the drop zone above.</p>
 </article>
+<canvas id="lawnCanvas" width="600px" height="300px"></canvas>
 <script>
     var holder = document.getElementById('holder'),
             tests = {
@@ -62,14 +60,15 @@
                     method: "POST",
                     body: formData
                 })
-                .then(function(res){ return res.json(); })
-                .then(function(data){ alert( JSON.stringify(data)) })
+                .then(function(response){ return response.json(); })
+                .then(function(data){ displayGrid(data); })
             } else {
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', '/upload');
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState == XMLHttpRequest.DONE) {
                         alert(xhr.responseText);
+                        displayGrid(Json.parse(xhr.responseText))
                     }
                 };
                 xhr.send(formData);
@@ -96,6 +95,48 @@
         fileupload.querySelector('input').onchange = function () {
             sendFiles(this.files);
         };
+    }
+
+    var gridOptions = {
+        color: '#f2f2f2',
+        GridSize: 15,
+        LinesSize: 1
+    };
+    var ctx, canvas;
+
+    function displayGrid(data) {
+        canvas = document.getElementById("lawnCanvas");
+        if (canvas.getContext) {
+            debugger;
+            ctx = canvas.getContext("2d");
+            var height = canvas.height;
+            var width = canvas.width;
+            ctx.clearRect(0, 0, width, height);
+            ctx.strokeStyle = gridOptions.color;
+            ctx.lineWidth = parseInt(gridOptions.LinesSize);
+
+            var xInc = height / data.lawn.ymax;
+            for (var i = 0; i <= height; i += xInc) {
+                ctx.moveTo(0, i);
+                ctx.lineTo(width, i);
+                ctx.stroke();
+            }
+
+            ctx.moveTo(0, height);
+            ctx.lineTo(width, height);
+            ctx.stroke();
+
+            var yInc = width / data.lawn.xmax;
+            for (var i = 0; i <= width; i += yInc) {
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, height);
+                ctx.stroke();
+            }
+
+            ctx.moveTo(width, 0);
+            ctx.lineTo(width, height);
+            ctx.stroke();
+        }
     }
 
 </script>

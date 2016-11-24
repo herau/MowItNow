@@ -1,8 +1,8 @@
 package com.github.herau;
 
 import com.github.herau.configuration.ApplicationProperties;
-import com.github.herau.domain.Action;
 import com.github.herau.domain.Lawn;
+import com.github.herau.domain.MowingAction;
 import com.github.herau.observers.MowerPositionConsoleDisplay;
 import com.github.herau.service.FileParserService;
 import com.github.herau.service.MowerService;
@@ -32,11 +32,11 @@ public class MowItNowApplicationTests {
 	public void contextLoads() throws IOException {
 		final Path inputFilePath = properties.getInputFile();
 
-		Action action = fileParser.parse(inputFilePath);
+		MowingAction mowingAction = fileParser.parse(inputFilePath);
 
-		final Lawn lawn = action.getLawn();
+		final Lawn lawn = mowingAction.getLawn();
 
-		action.getMovementsByMow().forEach((mower, movements) -> {
+		mowingAction.getMovementsByMow().forEach((mower, movements) -> {
 			new MowerPositionConsoleDisplay(mower);
 			mowerService.move(lawn, mower, movements);
 		});

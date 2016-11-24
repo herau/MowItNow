@@ -1,6 +1,6 @@
 package com.github.herau.web;
 
-import com.github.herau.domain.Action;
+import com.github.herau.domain.MowingAction;
 import com.github.herau.observers.MowerStepsObserver;
 import com.github.herau.service.FileParserService;
 import com.github.herau.service.MowerService;
@@ -31,13 +31,13 @@ public class UploadController {
         Path tempFile = Files.createTempFile(file.getName(), UUID.randomUUID().toString());
         file.transferTo(tempFile.toFile());
 
-        Action action = fileParser.parse(tempFile);
+        MowingAction mowingAction = fileParser.parse(tempFile);
 
-        MowerStepsObserver observer = new MowerStepsObserver(action.getLawn());
+        MowerStepsObserver observer = new MowerStepsObserver(mowingAction.getLawn());
 
-        action.getMovementsByMow().forEach((mower, movements) -> {
+        mowingAction.getMovementsByMow().forEach((mower, movements) -> {
             observer.addObservable(mower);
-            mowerService.move(action.getLawn(), mower, movements);
+            mowerService.move(mowingAction.getLawn(), mower, movements);
         });
 
         return observer.getDto();

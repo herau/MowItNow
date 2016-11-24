@@ -12,7 +12,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * Created by n27 on 11/22/16.
+ * Observe all mowers movements in the lawn.
+ * Generate a JSON representation of the this steps.
+ * @see com.github.herau.web.UploadController
+ * @see MowersDto
  */
 public class MowerStepsObserver implements Observer {
 

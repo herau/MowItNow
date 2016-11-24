@@ -1,10 +1,10 @@
 package com.github.herau.service;
 
 import com.github.herau.configuration.ApplicationProperties;
-import com.github.herau.domain.Action;
 import com.github.herau.domain.Lawn;
 import com.github.herau.domain.Movement;
 import com.github.herau.domain.Mower;
+import com.github.herau.domain.MowingAction;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,14 +42,14 @@ public class FileParserServiceTest {
         Mower firstMower = new Mower(1, 2, N);
         Mower secondMower = new Mower(3, 3, E);
 
-        Action action = service.parse(properties.getInputFile());
+        MowingAction mowingAction = service.parse(properties.getInputFile());
 
-        assertEquals(0, action.getLawn().getXMin());
-        assertEquals(0, action.getLawn().getYMin());
-        assertEquals(lawn.getXMax(), action.getLawn().getXMax());
-        assertEquals(lawn.getYMax(), action.getLawn().getYMax());
+        assertEquals(0, mowingAction.getLawn().getXMin());
+        assertEquals(0, mowingAction.getLawn().getYMin());
+        assertEquals(lawn.getXMax(), mowingAction.getLawn().getXMax());
+        assertEquals(lawn.getYMax(), mowingAction.getLawn().getYMax());
 
-        Map<Mower, Stream<Movement>> movementsByMow = action.getMovementsByMow();
+        Map<Mower, Stream<Movement>> movementsByMow = mowingAction.getMovementsByMow();
 
         assertEquals(2, movementsByMow.entrySet().size());
 

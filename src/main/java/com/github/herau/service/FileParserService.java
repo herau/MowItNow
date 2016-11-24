@@ -1,10 +1,10 @@
 package com.github.herau.service;
 
-import com.github.herau.domain.Action;
 import com.github.herau.domain.Cardinal;
 import com.github.herau.domain.Lawn;
 import com.github.herau.domain.Movement;
 import com.github.herau.domain.Mower;
+import com.github.herau.domain.MowingAction;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -31,10 +31,10 @@ public class FileParserService {
      *       <li>The second line is a series of instructions instructing the lawnmower to explore the lawn. The instructions are a sequence of characters without spaces.</li>
      *   </ul>
      * @param inputFilePath {@link Path} of the input file
-     * @return {@link Action} An object which contains information about the lawn, the mows and the steps instructions
+     * @return {@link MowingAction} An object which contains information about the lawn, the mows and the steps instructions
      * @throws IOException if any IO exception occurred during the file reading
      */
-    public Action parse(Path inputFilePath) throws IOException {
+    public MowingAction parse(Path inputFilePath) throws IOException {
         List<String> lines = Files.readAllLines(inputFilePath);
 
         String lawnLimit = lines.get(0);
@@ -53,6 +53,6 @@ public class FileParserService {
             movementsByMow.put(mower, Arrays.stream(mowSteps.split("")).map(Movement::valueOf));
         }
 
-        return new Action(lawn, movementsByMow);
+        return new MowingAction(lawn, movementsByMow);
     }
 }
