@@ -5,33 +5,77 @@
     <title>Mow it Now</title>
 
     <style>
-        #holder { border: 10px dashed #ccc; width: 300px; min-height: 300px; margin: 20px auto;}
-        #holder.hover { border: 10px dashed #0c0; }
-        #holder p { margin: 10px; font-size: 14px; }
-        .fail { background: #c00; padding: 2px; color: #fff; }
-        .hidden { display: none !important;}
+        #holder {
+            border: 10px dashed #ccc;
+            width: 300px;
+            min-height: 300px;
+            margin: 20px auto;
+        }
+
+        #holder.hover {
+            border: 10px dashed #0c0;
+        }
+
+        #holder p {
+            margin: 10px;
+            font-size: 14px;
+        }
+
+        .fail {
+            background: #c00;
+            padding: 2px;
+            color: #fff;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        canvas {
+            position: absolute;
+            width: 600px;
+            height: 300px;
+        }
+
+        #lawnCanvas {
+            z-index: 1;
+        }
+
+        #mowerCanvas {
+            z-index: 2;
+        }
     </style>
 </head>
 <body>
 <article>
     <div id="holder">
     </div>
-    <p id="upload" class="hidden"><label>Drag & drop not supported, but you can still upload via this input field:<br><input type="file"></label></p>
+    <p id="upload" class="hidden"><label>Drag & drop not supported, but you can still upload via this input
+        field:<br><input type="file"></label></p>
     <p id="formdata">XHR2's FormData is not supported</p>
     <p>Drag a test file from your desktop on to the drop zone above.</p>
 </article>
-<canvas id="lawnCanvas" width="600px" height="300px"></canvas>
+<canvas id="lawnCanvas"></canvas>
+<canvas id="mowerCanvas"></canvas>
 <script>
     var holder = document.getElementById('holder'),
-            tests = {
-                dnd: 'draggable' in document.createElement('span'),
-                formdata: !!window.FormData,
-                fetch: !!window.fetch
-            },
-            support = {
-                formdata: document.getElementById('formdata')
-            },
-            fileupload = document.getElementById('upload');
+        tests = {
+            dnd: 'draggable' in document.createElement('span'),
+            formdata: !!window.FormData,
+            fetch: !!window.fetch
+        },
+        support = {
+            formdata: document.getElementById('formdata')
+        },
+        fileupload = document.getElementById('upload'),
+        gridOptions = {
+            color: '#f2f2f2',
+            LinesSize: 1
+        },
+        mowOptions = {
+            LinesSize: 1,
+            colors : ['#FFF333', '#33A5FF', '#3FFF33', '#B833FF', '#FF7A33', '#FF33C4']
+        };
 
     "formdata".split(' ').forEach(function (api) {
         if (tests[api] === false) {
@@ -56,16 +100,20 @@
         if (tests.formdata) {
             if (tests.fetch) {
                 fetch("/upload",
-                {
-                    method: "POST",
-                    body: formData
-                })
-                .then(function(response){ return response.json(); })
-                .then(function(data){ displayGrid(data); })
+                    {
+                        method: "POST",
+                        body: formData
+                    })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        displayGrid(data);
+                    })
             } else {
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', '/upload');
-                xhr.onreadystatechange = function() {
+                xhr.onreadystatechange = function () {
                     if (xhr.readyState == XMLHttpRequest.DONE) {
                         alert(xhr.responseText);
                         displayGrid(Json.parse(xhr.responseText))
@@ -97,46 +145,67 @@
         };
     }
 
-    var gridOptions = {
-        color: '#f2f2f2',
-        GridSize: 15,
-        LinesSize: 1
-    };
-    var ctx, canvas;
-
     function displayGrid(data) {
-        canvas = document.getElementById("lawnCanvas");
-        if (canvas.getContext) {
-            debugger;
-            ctx = canvas.getContext("2d");
-            var height = canvas.height;
-            var width = canvas.width;
-            ctx.clearRect(0, 0, width, height);
-            ctx.strokeStyle = gridOptions.color;
-            ctx.lineWidth = parseInt(gridOptions.LinesSize);
+        var canvas = document.getElementById("lawnCanvas"),
+            mowerCanvas = document.getElementById("mowerCanvas");
 
-            var xInc = height / data.lawn.ymax;
-            for (var i = 0; i <= height; i += xInc) {
-                ctx.moveTo(0, i);
-                ctx.lineTo(width, i);
-                ctx.stroke();
-            }
+        if (!canvas.getContext || !mowerCanvas.getContext) {
+            return
+        }
 
-            ctx.moveTo(0, height);
-            ctx.lineTo(width, height);
-            ctx.stroke();
+        var ctx = canvas.getContext("2d");
+        var height = canvas.height;
+        var width = canvas.width;
+        ctx.clearRect(0, 0, width, height);
+        ctx.strokeStyle = gridOptions.color;
+        ctx.lineWidth = parseInt(gridOptions.LinesSize);
 
-            var yInc = width / data.lawn.xmax;
-            for (var i = 0; i <= width; i += yInc) {
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i, height);
-                ctx.stroke();
-            }
-
-            ctx.moveTo(width, 0);
-            ctx.lineTo(width, height);
+        var yInc = height / (data.lawn.ymax + 1);
+        for (var y = 0; y <= height; y += yInc) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(width, y);
             ctx.stroke();
         }
+
+        ctx.moveTo(0, height);
+        ctx.lineTo(width, height);
+        ctx.stroke();
+
+        var xInc = width / (data.lawn.xmax + 1);
+        for (var x = 0; x <= width; x += xInc) {
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, height);
+            ctx.stroke();
+        }
+
+        ctx.moveTo(width, 0);
+        ctx.lineTo(width, height);
+        ctx.stroke();
+
+        var mowerCtx = mowerCanvas.getContext("2d");
+        mowerCtx.clearRect(0, 0, width, height);
+        mowerCtx.lineWidth = parseInt(mowOptions.LinesSize);
+
+        data.mowers.forEach(function (mower, index) {
+            var rectFill = mowOptions.colors[index % mowOptions.colors.length];
+            var steps = mower.steps, length = mower.steps.length;
+            steps.forEach(function (step, stepIndex) {
+                var xStep = step.x * xInc;
+                var yStep = (step.y + 1) * yInc;
+                console.log(step);
+
+                mowerCtx.fillStyle = rectFill;
+                mowerCtx.fillRect(xStep + 1, height - yStep + 1, xInc - 2, yInc - 2);
+
+                if (stepIndex == length - 1) {
+                    mowerCtx.fillStyle = '#060800';
+                    mowerCtx.fillText(step.direction, xStep + (xInc * 0.10), height - yStep + (yInc * 0.45));
+
+                    mowerCtx.strokeStyle = 'red';
+                    mowerCtx.strokeRect(xStep + 1, height - yStep + 1, xInc - 2, yInc - 2);
+                }
+            })
+        });
     }
 
 </script>
